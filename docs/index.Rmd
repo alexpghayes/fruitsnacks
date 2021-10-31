@@ -6,7 +6,6 @@ output:
     code_folding: hide
     theme: sandstone
     highlight: tango
-    toc: true
 ---
 
 ```{r setup, include=FALSE}
