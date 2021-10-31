@@ -1,17 +1,17 @@
-consumption_order,kath,kate,gaby,jon,emily,will,rage,mickey,chris,christian,alex,lauren,fruit_snack_type
-1,1,2,2,2,2,2,3,1,3,2,2,1,Annie's Sunny Citrus
-2,1,1,1,3,2,3,2,5,3,5,4,4,Betty Crocker Spiderman
-3,2,5,3,3,1,3,4,3,1,1,2,3,Welch's Island Fruits
-4,1,5,4,2,2,4,3,3,4,1,3,3,Welch's Berries & Cherries
-5,1,2,1,1,1,3,2,1,2,1,4,3,Welch's Superfruit
-6,2,4,2,2,2,2,1,4,2,3,3,4,Betty Crocker Scooby-Doo
-7,1,4,2,4,4,5,2,3,1,1,1,2,Annies Bunny Tropical Treats
-8,1,3,1,1,1,1,1,1,2,1,2,2,Betty Crocker Starwars
-9,1,2,1,3,1,4,1,1,2,1,1,1,Motts Tropical
-10,1,1,2,1,1,4,1,1,1,1,3,3,Fruit Shoppe Sharks
-11,1,4,1,NA,2,3,1,3,4,3,2,4,Funables Mixed Berry
-12,1,1,1,2,1,2,1,3,3,5,4,5,Motts Animals
-13,1,4,1,1,1,1,1,1,1,1,1,1,Betty Crocker Trolls
-14,3,5,3,4,4,5,3,1,1,1,2,1,Annie's Bunny Summer Strawberry
-15,2,3,2,4,4,4,1,1,1,1,2,1,Annie's Bunny Berry Patch
-16,1,5,4,3,3,3,4,3,3,4,5,5,Welch's Mixed Fruit
+consumption_order,kath,kate,gaby,jon,emily,will,rage,mickey,chris,christian,alex,lauren,fruit_snack_type,brand
+1,1,2,2,2,2,2,3,1,3,2,2,1,Annie's Sunny Citrus,Annie's
+2,1,1,1,3,2,3,2,5,3,5,4,4,Betty Crocker Spiderman,Betty Crocker
+3,2,5,3,3,1,3,4,3,1,1,2,3,Welch's Island Fruits,Welch's
+4,1,5,4,2,2,4,3,3,4,1,3,3,Welch's Berries & Cherries,Welch's
+5,1,2,1,1,1,3,2,1,2,1,4,3,Welch's Superfruit,Welch's
+6,2,4,2,2,2,2,1,4,2,3,3,4,Betty Crocker Scooby-Doo,Betty Crocker
+7,1,4,2,4,4,5,2,3,1,1,1,2,Annie's Bunny Tropical Treats,Annie's
+8,1,3,1,1,1,1,1,1,2,1,2,2,Betty Crocker Starwars,Betty Crocker
+9,1,2,1,3,1,4,1,1,2,1,1,1,Motts Tropical,Motts
+10,1,1,2,1,1,4,1,1,1,1,3,3,Fruit Shoppe Sharks,Fruit Shoppe
+11,1,4,1,NA,2,3,1,3,4,3,2,4,Funables Mixed Berry,Funables
+12,1,1,1,2,1,2,1,3,3,5,4,5,Motts Animals,Motts
+13,1,4,1,1,1,1,1,1,1,1,1,1,Betty Crocker Trolls,Betty Crocker
+14,3,5,3,4,4,5,3,1,1,1,2,1,Annie's Bunny Summer Strawberry,Annie's
+15,2,3,2,4,4,4,1,1,1,1,2,1,Annie's Bunny Berry Patch,Annie's
+16,1,5,4,3,3,3,4,3,3,4,5,5,Welch's Mixed Fruit,Welch's

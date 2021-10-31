@@ -1,0 +1,192 @@
+---
+title: "120 N Franklin Fruit Snack Apocalypse"
+output:
+  html_document:
+    number_sections: true
+    code_folding: hide
+    theme: sandstone
+    highlight: tango
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(lme4)
+library(rstanarm)
+library(emmeans)
+library(DT)
+library(ggalluvial)
+library(broom.mixed)
+
+options(contrasts = rep("contr.sum", 2))
+
+theme_set(theme_dark(14))
+```
+
+# Data
+
+Everybody's ratings are in the table below, click on your name to sort your ratings from highest-to-lowest, or from lowest-to-highest.
+
+```{r}
+ratings <- read_csv(
+  here::here("data/ratings.csv"),
+  col_types = "iiiiiiiiiiiiic"
+) %>% 
+  select(fruit_snack_type, brand, consumption_order, everything())
+
+datatable(ratings, rownames = FALSE, filter = "none", options = list(pageLength = 8, scrollX = TRUE))
+```
+
+# Visualization of the data
+
+Here's all of the ratings at all at once. Note that Jon did not rate the Funables Mixed Berry flavor. Shame!
+
+```{r}
+tasters <- c(
+  "kath",
+  "kate",
+  "gaby",
+  "jon",
+  "emily",
+  "will",
+  "rage",
+  "mickey",
+  "chris",
+  "christian",
+  "alex",
+  "lauren"
+)
+
+ratings_long <- ratings %>%
+  mutate_at(vars(fruit_snack_type), fct_inorder) %>%
+  pivot_longer(
+    cols = one_of(tasters),
+    names_to = "rater",
+    values_to = "rating"
+  )
+
+ratings_long %>%
+  ggplot(aes(rater, fct_rev(fruit_snack_type), fill = rating)) +
+  geom_tile() +
+  scale_fill_distiller(direction = 1, limits = c(1, 5), palette = "RdYlGn") +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  labs(
+    fill = "rating",
+    caption = "Rows in order of consumption, beginning with Annie's Sunny Citrus"
+  )
+```
+
+# Average ratings by fruit snack
+
+The average fruit snack ratings look like this. Welch's Mixed Fruit was the most popular and Betty Crocker Trolls was the least popular.
+
+```{r}
+ols <- lm(rating ~ fruit_snack_type + rater, data = ratings_long)
+
+fit <- lme4::lmer(rating ~ fruit_snack_type + (1 | rater), data = ratings_long)
+# summary(fit)
+
+fit_emm <- emmeans(fit, ~fruit_snack_type, lmer.df = "satterthwaite")
+
+broom::tidy(fit_emm, conf.int = TRUE) %>%
+  arrange(estimate) %>%
+  mutate_at(vars(fruit_snack_type), fct_inorder) %>%
+  ggplot(aes(x = fruit_snack_type, y = estimate, ymin = conf.low, ymax = conf.high, color = estimate)) +
+  geom_pointrange() +
+  scale_color_distiller(direction = 1, limits = c(1, 5), palette = "RdYlGn") +
+  coord_flip() +
+  theme(
+    axis.title.y = element_blank(),
+    legend.position = "none"
+  ) +
+  labs(
+    title = "Fruit snack ratings by snack",
+    y = "Estimated rating"
+  )
+```
+
+# Average ratings by rater
+
+The average fruit snack ratings look like this. Welch's Mixed Fruit was the most popular and Betty Crocker Trolls was the least popular.
+
+```{r}
+# coef(fit)$rater %>% 
+#   janitor::clean_names() %>% 
+#   select(intercept)
+
+fixed_intercept <- 2.2846  # from fit
+
+tidy(fit, effects = "ran_vals", conf.int = TRUE) %>% 
+  arrange(desc(estimate)) %>% 
+  mutate(
+    rater = fct_rev(fct_inorder(level))
+  ) %>% 
+  ggplot() +
+  aes(
+    x = rater, 
+    y = estimate + fixed_intercept,
+    ymin = conf.low + fixed_intercept,
+    ymax = conf.high + fixed_intercept,
+    color = estimate + fixed_intercept
+  ) +
+  geom_pointrange() +
+  scale_color_distiller(direction = 1, limits = c(1, 5), palette = "RdYlGn") +
+  coord_flip() +
+  theme(
+    axis.title.y = element_blank(),
+    legend.position = "none"
+  ) +
+  labs(
+    title = "Average rating by rater",
+    y = "Estimated rating"
+  )
+```
+
+# Did we get sick of fruit snacks over time?
+
+I was curious if we all got sick of fruit snacks over the course of the evening and our ratings went down as a result. It looks like this might have been the case for some people but not for everyone.
+
+```{r}
+ratings_long %>% 
+  na.omit() %>% 
+  ggplot() +
+  aes(x = consumption_order, y = rating) +
+  geom_smooth(se = FALSE, method = "lm", linetype = "dashed", formula = y ~ x, color = "darkgrey") +
+  geom_line() +
+  geom_point(aes(color = rating)) +
+  scale_color_distiller(direction = 1, limits = c(1, 5), palette = "RdYlGn") +
+  facet_wrap(vars(rater)) +
+  labs(
+    y = "Rating",
+    x = "Number of fruit snacks consumed so far",
+    caption = "Dashed lines from simple linear regression"
+  )
+```
+
+# Ratings by rater and brand
+
+```{r}
+ratings_long %>%
+  mutate(
+    brand = as.factor(brand)
+  ) %>% 
+  group_by(brand, rater) %>% 
+  mutate(average_rating = mean(rating)) %>% 
+  ggplot(aes(rater, fct_rev(brand), fill = average_rating)) +
+  geom_tile() +
+  scale_fill_distiller(direction = 1, limits = c(1, 5), palette = "RdYlGn") +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  labs(
+    fill = "rating",
+    title = "Average ratings by rater and brand"
+  )
+```
+

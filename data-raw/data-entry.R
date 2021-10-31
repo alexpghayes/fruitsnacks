@@ -41,7 +41,7 @@ fruit_snack_types_in_consumption_order <- c(
   "Welch's Berries & Cherries",
   "Welch's Superfruit",
   "Betty Crocker Scooby-Doo",
-  "Annies Bunny Tropical Treats",
+  "Annie's Bunny Tropical Treats",
   "Betty Crocker Starwars",
   "Motts Tropical",
   "Fruit Shoppe Sharks",
@@ -51,6 +51,25 @@ fruit_snack_types_in_consumption_order <- c(
   "Annie's Bunny Summer Strawberry",
   "Annie's Bunny Berry Patch",
   "Welch's Mixed Fruit"
+)
+
+brands_in_consumption_order <- c(
+  "Annie's",
+  "Betty Crocker",
+  "Welch's",
+  "Welch's",
+  "Welch's",
+  "Betty Crocker",
+  "Annie's",
+  "Betty Crocker",
+  "Motts",
+  "Fruit Shoppe",
+  "Funables",
+  "Motts",
+  "Betty Crocker",
+  "Annie's",
+  "Annie's",
+  "Welch's"
 )
 
 ratings_raw %>% 
@@ -63,7 +82,8 @@ ratings_raw %>%
   mutate_all(na_if, "?") %>% 
   mutate_all(as.integer) %>% 
   mutate(
-    fruit_snack_type = fruit_snack_types_in_consumption_order
+    fruit_snack_type = fruit_snack_types_in_consumption_order,
+    brand = brands_in_consumption_order
   ) %>% 
   write_csv(
     here::here("data/ratings.csv")
